@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تحديات يومية</title>
+  <link rel="icon" href="img/dd.jpg" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+    }
+
+    .search-container {
+      display: flex;
+      gap: 10px; /*تحديد المسافة*/
+      margin: 20px;
+      align-items: center;
+    }
+
+    #searchInput {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      flex: 1; /*  يتمدد وياخذ اكبر مساحة العنصر*/
+    }
+
+    .clear-btn {
+      padding: 8px 16px;
+      background-color: #8e2cb1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-size: 16px;
+    }
+
+    .clear-btn:hover {
+      background-color: #2b62c0;
+    }
+
+    .challenge-container {
+      display: flex; /*بشكل مرن بجوار بعضهم*/
+      flex-wrap: wrap; /*تنتقل لسطر جديد اذا لم يكن هناك مساحة*/
+      padding: 1rem;
+      gap: 1.5rem;/*مسافة بين العنصر والاخر*/
+      justify-content: center;
+    }
+
+    .challenge-card {/*البطاقات ككل*/
+      width: calc(30% - 1.5rem);
+      min-width: 250px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+      .challenge-card {
+        width: calc(50% - 1.5rem);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .challenge-card {
+        width: 100%;
+      }
+    }
+
+    .challenge-card:hover { /*لمن احوم حول العنصر يكبر*/
+      transform: scale(1.01);
+    }
+
+    .detail-view {/*التفاصيل تبع البطاقة*/
+      display: none;
+      padding: 1rem;
+      max-width: 600px;
+      margin: 15px auto;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .active-view { /*العناصر تعرض ككتلة*/
+      display: block;
+    }
+
+    .card-title { /*العناوين بالصفحة تبع التحديات*/
+      font-weight: bold;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+
+    .card-img {/*البطاقات*/
+      width: 100%;
+      height: max-content;/*ارتفاع الصورة يحدد تلقائي*/
+      border-radius: 6px;
+      margin-bottom: 0.75rem;/*المسافة بين الصورة والنص*/
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .challenge-frame {/* بالتفاصيل الاطار خلف الصورة والنص*/
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #f9f9f9;
+      border-radius: 6px;
+      border: 1px solid #eee;
+    }
+
+    .challenge-frame h2 {/*العنوان بالاعلى بالتفاصيل*/
+      font-size: 1.2rem;
+      margin-top: 0;
+    }
+
+    .challenge-frame p {/*الوصف  بالتفاصيل*/
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    textarea {/*داخل الملاحظات بالتفاصيل*/
+      width: calc(100% - 12px);
+      height: 80px !important;/*يجبره على استخدام هذا الارتفاع*/
+      /* تثبيت ارتفاع مساحة الملاحظات بشكل قاطع */
+      margin-top: 0.5rem;
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+      resize: none;
+      /* منع تغيير حجم مربع النص */
+    }
+
+    .buttons {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .btn {/*الازرار الى بالاسفل بالتفاصيل الانجاز*/
+      flex-grow: 1; /*يكبر العنصر لملى المساحة الفارغة بالتساوي*/
+      padding: 0.7rem;
+      background: #e0e0e0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      background: #d1d1d1;
+    }
+
+    .progress-bar { /*الخط تبع التقدم*/
+      width: 100%;
+      height: 10px;
+      background: #eee;
+      border-radius: 5px;
+      overflow: hidden; /*اخفاء اي محتوى يخرج خارج الصندوق*/
+      margin-top: 0.75rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%; /*يخلي التعبئة بنفس ارتفاع الشريط*/
+      background: #8e2cb1;
+      width: 0%; /*لا يوجد تعبئة*/
+      transition: width 0.5s;/*لما يتغير العرض بشكل سلس*/
+      border-radius: 5px;
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      color: #555;
+    }
+
+    .small-square {
+      display: block;
+      width: 90px;
+      height: 35px;
+      background-color: #8e2cb1;
+      color: rgb(245, 240, 240);
+      text-align: center;
+      line-height: 35px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .small-square:hover {
+      background-color: #6293de;
+    }
+
+    .support-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      background-color: #8e2cb1;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 50px;
+      border-radius: 50%;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+
+    .support-button:hover {
+      background-color: #0056b3;
+    }
+
+
+    /* أنماط زر الوضع الليلي */
+    .night-mode-toggle {/*الخط*/
+      cursor: pointer;
+      padding: 8px;
+      margin-left: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .night-mode-icon {/*الايقونة*/
+      font-size: 20px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* أنماط الوضع الليلي */
+    body.dark-mode {
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .challenge-card {
+      background-color: #2d2d2d;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .detail-view,
+    body.dark-mode .challenge-frame {
+      background-color: #2d2d2d;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .btn {
+      background-color: #444;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .btn:hover {
+      background-color: #555;
+    }
+
+    body.dark-mode textarea {
+      background-color: #333;
+      color: #e0e0e0;
+      border-color: #555;
+    }
+
+    body.dark-mode .search-container input {
+      background-color: #333;
+      color: #e0e0e0;
+      border-color: #555;
+    }
+
+    body.dark-mode .clear-btn {
+      background-color: #6a3093;
+    }
+
+    body.dark-mode .clear-btn:hover {
+      background-color: #533fb8;
+    }
+  </style>
+</head>
+<header>
+  <!-- العناصر الموجودة حاليا -->
+  <div class="night-mode-toggle" onclick="toggleNightMode()">
+    <div class="night-mode-icon" style="color: #8e2cb1;">▶</div>
+
+    <a href="support.html" class="support-button">؟</a>
+  </div>
+</header>
+
+<body>
+
+
+  <div class="search-container" id="searchContainer">
+    <input type="text" placeholder="ابحث..." id="searchInput" oninput="handleSearch()">
+    <button class="clear-btn" onclick="clearSearch()">مسح</button>
+  </div>
+
+  <div class="challenge-container" id="challengeList">
+    <div class="challenge-card" onclick="openChallenge(1)">
+      <div class="card-title">يوم بلا تذمر </div>
+      <img src="img/r.png" class="card-img" alt="" />
+      <div class="card-desc"> إعادة برمجة العقل للتركيز على الإيجابيات ...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(2)">
+      <div class="card-title">يوم الصمت المؤقت </div>
+      <img src="img/r1.png" class="card-img" alt=" " />
+      <div class="card-desc">إدراك قوة الصمت وتنمية التركيز الداخلي ...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(3)">
+      <div class="card-title">يوم الإنجاز الصعب </div>
+      <img src="img/r2.png" class="card-img" alt="" />
+      <div class="card-desc">كسر عادة التأجيل وتعزيز الثقة ...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(4)">
+      <div class="card-title"> يوم لا للهاتف </div>
+      <img src="img/r3.png" class="card-img" alt=" " />
+      <div class="card-desc">التحرر من الإدمان الرقمي واستغلال الوقت...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(5)">
+      <div class="card-title">يوم تعلم مهارة جديدة </div>
+      <img src="img/r4.png" class="card-img" alt=" " />
+      <div class="card-desc">تجربة شيء جديد تمامًا...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(6)">
+      <div class="card-title">يوم الـ10 آلاف خطوة</div>
+      <img src="img/r5.png" class="card-img" alt=" " />
+      <div class="card-desc">تنشيط الجسم والمزاج...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(7)">
+      <div class="card-title">يوم التحدي الإبداعي </div>
+      <img src="img/r6.png" class="card-img" alt=" " />
+      <div class="card-desc"> فتح باب الإبداع في ذهنك ...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(8)">
+      <div class="card-title">يوم أنا القائد</div>
+      <img src="img/r7.png" class="card-img" alt="" />
+      <div class="card-desc">التحكم الذاتي والقيادة الشخصية...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(9)">
+      <div class="card-title">يوم الأعمال الصغيرة</div>
+      <img src="img/r8.png" class="card-img" alt=" " />
+      <div class="card-desc">تفريغ التراكمات الذهنية....</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(10)">
+      <div class="card-title">يوم لطف غير مشروط</div>
+      <img src="img/r9.png" class="card-img" alt=" " />
+      <div class="card-desc">تعزيز الطاقة الإيجابية والتأثير الإنساني ...</div>
+    </div>
+    <div>
+      <br><br>
+
+
+    </div>
+
+  </div>
+  
+
+  <div class="detail-view" id="challengeDetail">
+    <button class="back-button" onclick="goBackToChallenges()">← العودة</button>
+    <div class="challenge-frame">
+      <h2 id="challengeTitle"></h2>
+      <img id="challengeImage" style="width:100%; height:auto; border-radius:6px; margin-bottom: 0.5rem;"
+        alt="صورة التحدي بالتفصيل" />
+      <p id="challengeDescription"></p>
+    </div>
+    <div>
+      <h3>هدف التحدي:</h3>
+      <p style="font-size: 1rem;"> كسر الروتين، وصناعة نسخة أقوى من الذات! هذا التحدي هو فرصة لاكتشاف قدراتك، تعزيز
+        انضباطك، وتحقيق تقدم حقيقي في جانب من جوانب حياتك. .</p>
+    </div>
+    <div>
+      <h3>ملاحظات:</h3>
+      <textarea id="challengeNotes" style="height: 80px !important; resize: none;"
+        placeholder="اكتب ملاحظاتك هنا..."></textarea>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="buttons">
+      <button class="btn" id="completeButton" onclick="markCompleted()">تم الإنجاز</button>
+
+      <button class="btn" onclick="shareChallenge()">مشاركة</button>
+
+
+    </div>
+
+
+
+    <a href="interface.html" class="small-square">رجوع</a>
+
+    <script>
+
+      // أضف هذا في بداية السكريبت بعد فتح <script>
+      const cards = document.querySelectorAll('.challenge-card');
+
+      function handleSearch() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        cards.forEach(card => {
+          const cardText = card.textContent.toLowerCase();
+          if (cardText.includes(searchTerm)) {
+            card.style.display = ''; // إظهار البطاقة
+            card.style.boxShadow = '0 0 10px green'; // إضافة تأثير مرئي بدل الحدود
+          } else {
+            card.style.display = 'none'; // إخفاء البطاقة
+          }
+        });
+      }
+
+      function clearSearch() {
+        document.getElementById('searchInput').value = '';
+        cards.forEach(card => {
+          card.style.display = '';
+          card.style.boxShadow = '';
+        });
+      }
+
+      const challengeData = {
+        1: {
+          title: "يوم بلا تذمر",
+          img: "img/r.png",
+          desc: "جرب أن تقضي يومك بالكامل دون أن تتذمر من أي شيء مهما كان صغيرًا. كلما شعرت برغبة في الشكوى، استبدلها بعبارة شكر أو ملاحظة إيجابية. هذا التحدي يدربك على تغيير منظورك للأشياء ويزيد من مستوى رضاك الداخلي. ستتفاجأ بكمية الأمور التي كنت تراها مزعجة بينما هي في الواقع بسيطة. اكتب في نهاية اليوم كيف تغيّر شعورك.."
+        },
+        2: {
+          title: "يوم تحدي الصمت المؤقت",
+          img: "img/r1.png",
+          desc: " خصص أربع ساعات متواصلة من يومك للصمت التام: لا كلام، لا رسائل، لا موسيقى. خلال هذا الوقت، لاحظ أفكارك، أنفاسك، وما يدور من حولك. قد تكتشف مدى الضوضاء التي تملأ عالمك وكم يندر الاستماع الحقيقي. استخدم دفترًا لتسجيل ملاحظاتك وأفكارك أثناء وبعد التجربة. ستشعر براحة ذهنية ووضوح لم تعهده. ."
+        },
+        3: {
+          title: "يوم الإنجاز الصعب ",
+          img: "img/r2.png",
+          desc: "اختر مهمة واحدة مؤجلة منذ زمن طويل والتزم بإنهائها اليوم، أياً كانت صعوبتها أو مدتها. لا تشتت نفسك، ركز عليها فقط حتى تكتمل. ستواجه بعض المقاومة الداخلية، لكنك ستشعر بفخر عظيم عند الإنجاز. هذا التحدي يعلمك أن مواجهة المهام المؤجلة أكثر تحررًا من تجنبها. وثّق قبل وبعد حالتك النفسية.."
+        },
+        4: {
+          title: "يوم لا للهاتف",
+          img: "img/r3.png",
+          desc: "حاول أن تمر بيومك دون استخدام هاتفك إلا في الضرورة القصوى (مكالمة عاجلة فقط). استغل الوقت الذي كنت ستقضيه في التصفح للقراءة، المشي، أو التحدث مع من حولك. ستلاحظ مدى إدمانك عليه ومدى الحرية التي يمكنك استعادتها. قد يكون الأمر صعبًا في البداية، لكنه مريح على المدى الطويل. لاحظ الفرق في جودة يومك.."
+        },
+        5: {
+          title: "يوم تعلم مهارة جديدة",
+          img: "img/r4.png",
+          desc: "اختر مهارة بسيطة كنت تؤجلها: التحدث بلغة جديدة، التعديل على الصور، الطبخ، أو حتى التطريز. خصص يومك لتعلمها نظريًا وعمليًا عبر فيديوهات أو خطوات مكتوبة. التعلم في يوم واحد لا يعني الإتقان، بل التجربة الأولى فقط. ستشعر بالحماسة وستنمو ثقتك بنفسك. التقط صورًا أو دوّن تطورك.."
+        },
+        6: {
+          title: "يوم الـ10 آلاف خطوة",
+          img: "img/r5.png",
+          desc: "استخدم عدّاد الخطوات في هاتفك أو ساعتك وابدأ المشي حتى تصل إلى 10,000 خطوة خلال اليوم. امشِ في البيت، الحي، أو حتى اصعد الدرج بدلاً من المصعد. هذه الحركة المستمرة ستزيد من طاقتك وتحسن مزاجك. شارك التحدي مع صديق ليكون أكثر تحفيزًا. لاحظ كيف ينعكس النشاط على حالتك الذهنية.."
+        },
+        7: {
+          title: "يوم التحدي الإبداعي",
+          img: "img/r6.png",
+          desc: "خصص يومك لإطلاق العنان لإبداعك. ارسم، اكتب، صوّر، أو حتى ابتكر قصة وهمية. لا تقيّد نفسك بالقواعد أو الكمال، الهدف هو التعبير الحر. جرّب أسلوبًا جديدًا لم تجربه من قبل. اترك حكمك جانبًا واستمتع فقط بالخلق. في نهاية اليوم، شارك ما أنجزته أو احتفظ به كذكرى.."
+        },
+        8: {
+          title: "يوم أنا القائد",
+          img: "img/r7.png",
+          desc: "تصرف طوال اليوم كأنك مدير حياتك بالكامل. ضع جدولًا زمنيًا، اتخذ قرارات واضحة، نظم غرفتك أو مكتبك. تخيّل أنك تدير شركة اسمها أنا، وكل قرار يؤثر على نجاحها. ستحسّ أنك مسؤول بحق عن وقتك وخياراتك. هذا التحدي ينمّي القيادة الذاتية والانضباط الداخلي.."
+        },
+        9: {
+          title: "يوم الأعمال الصغيرة",
+          img: "img/r8.png",
+          desc: "اكتب قائمة بـ10 مهام صغيرة كنت تؤجلها (تنظيف درج، إصلاح شيء، إرسال بريد...). أنجزها كلها في يوم واحد. هذه المهام تستهلك طاقة ذهنية عند تأجيلها دون أن نشعر. عند إنجازها، ستشعر بأنك أخف وأقل فوضى داخليًا. إنها طريقة فعالة لبناء الزخم والتحفيز.."
+        },
+        10: {
+          title: "يوم لطف غير مشروط",
+          img: "img/r9.png",
+          desc: "اختر 5 طرق على الأقل لتكون لطيفًا فيها مع من حولك: ابتسامة، رسالة جميلة، هدية صغيرة، مساعدة غير متوقعة. افعلها دون انتظار مقابل أو مديح. هذا التحدي يعزز التعاطف ويرفع مستوى الطاقة الإيجابية لديك ولدى الآخرين. وستشعر براحة داخلية وسعادة غير متوقعة.."
+        }
+      };
+
+
+
+      function openChallenge(id) {//عرض تفاصيل التحدي
+        currentChallengeId = id;
+
+        const data = challengeData[id];
+        document.getElementById("challengeList").style.display = "none";
+        document.getElementById("challengeDetail").classList.add("active-view");
+        document.getElementById("challengeTitle").innerText = data.title;
+        document.getElementById("challengeImage").src = data.img;
+        document.getElementById("challengeDescription").innerText = data.desc;
+        document.getElementById("completeButton").style.display = "block";
+        document.querySelector(".search-container").style.visibility = "hidden";
+
+        loadNotes(id);
+      }
+
+
+
+      const notesTextarea = document.querySelector('textarea[placeholder="اكتب ملاحظاتك هنا..."]');
+
+      function saveNotes(challengeId) {// حفظ و استرجاع البيانات
+        localStorage.setItem('notes_' + challengeId, notesTextarea.value);
+      }
+
+      function loadNotes(challengeId) {
+        const saved = localStorage.getItem('notes_' + challengeId);
+        if (saved) {
+          notesTextarea.value = saved;
+        } else {
+          notesTextarea.value = '';
+        }
+      }
+      notesTextarea.addEventListener('input', () => {
+        saveNotes(currentChallengeId);
+      });
+
+      function goBackToChallenges() {
+        document.getElementById("challengeDetail").classList.remove("active-view");
+        document.getElementById("challengeList").style.display = "flex";
+        document.getElementById("completeButton").style.display = "none";
+        document.querySelector(".search-container").style.visibility = "visible";
+
+       //لاعادة الزر حق التقدم
+
+      }
+
+      function markCompleted() {
+        document.getElementById("progressFill").style.width = "100%";
+      }
+
+      function resetProgress() {
+        document.getElementById("progressFill").style.width = "0%";
+      }
+
+
+
+      function shareChallenge() {// المشاركة
+        const currentUrl = window.location.href;
+        navigator.clipboard.writeText(currentUrl).then(() => {
+          alert("تم نسخ رابط التحدي إلى الحافظة!");
+        }).catch(err => {
+          console.error('فشل نسخ الرابط: ', err);
+          alert("فشل نسخ الرابط.");
+        });
+      }
+
+
+      // دالة تبديل الوضع الليلي
+      function toggleNightMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+      }
+
+      // تحميل حالة الوضع الليلي عند فتح الصفحة
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+      }
+
+
+    </script>
+</body>
+
+</html>

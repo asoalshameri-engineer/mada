@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>الدعم الفني</title>
+  <link rel="icon" href="img/dd.jpg" type="image/png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+
+    h1,
+    h2 {
+      color: #333;/*لدعم الفني
+الأسئلة الشائعة*/
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .faq-item {/*الخطوط*/
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+      cursor: pointer;
+    }
+
+    .faq-item h3 {/*البقية*/
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-answer {
+      display: none;
+      padding-top: 10px;
+      color: #555;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-item h3::after {/* يظهر بعد العنوان*/
+      content: '▶';
+      font-size: 14px;
+      transition: transform 0.3s;
+    }
+
+    .faq-item.active h3::after {/*عند تفعيل العنصر بالضغط العنصر يدور 90 مرة للاسفل*/
+      transform: rotate(90deg);
+    }
+
+    label { /*حقول الادخال*/
+      display: block;
+      margin-top: 10px; /*مسا*/
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #8e2cb1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* أنماط زر الوضع الليلي */
+    .night-mode-toggle {
+      cursor: pointer;
+      padding: 8px;
+      margin-left: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .night-mode-icon {
+      font-size: 20px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* أنماط الوضع الليلي */
+    body.dark-mode {
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+    }
+
+   
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <!-- العناصر الموجودة حاليا -->
+    <div class="night-mode-toggle" onclick="toggleNightMode()">
+      <div class="night-mode-icon" style="color: #8e2cb1;">▶</div>
+
+
+    </div>
+  </header>
+  <h1>الدعم الفني</h1>
+
+  <div class="section">
+    <h2>الأسئلة الشائعة</h2>
+    <div class="faq-item">
+      <h3>كيف أستخدم الموقع؟</h3>
+      <div class="faq-answer">قم بتسجيل الدخول، ثم تصفح الأقسام الرئيسية، مثل التحديات أو المقالات أو بطاقات الوعي.
+      </div>
+    </div>
+    <div class="faq-item">
+      <h3>ماذا أفعل إذا لم يعمل شيء؟</h3>
+      <div class="faq-answer">يمكنك تحديث الصفحة، أو المحاولة من متصفح مختلف. وإذا استمرت المشكلة، تواصل معنا عبر
+        النموذج أدناه.</div>
+    </div>
+    <div class="faq-item">
+      <h3>هل يمكنني التواصل مع الدعم مباشرة؟</h3>
+      <div class="faq-answer">نعم، عبر البريد أو واتساب أو الدردشة الحية الموضحة في الأسفل.</div>
+    </div>
+
+    <!-- أسئلة عن الملف الشخصي -->
+    <div class="faq-item">
+      <h3>كيف أعدل ملفي الشخصي؟</h3>
+      <div class="faq-answer">اذهب إلى صفحة "حسابي"، ثم اختر "تعديل البيانات"، وقم بتحديث الاسم أو الصورة أو البريد
+        الإلكتروني.</div>
+    </div>
+    <div class="faq-item">
+      <h3>هل يمكنني تغيير كلمة المرور؟</h3>
+      <div class="faq-answer">نعم، من صفحة الإعدادات، اختر "تغيير كلمة المرور"، وادخل الحالية والجديدة.</div>
+    </div>
+
+    <!-- أسئلة عن بطاقات التحدي -->
+    <div class="faq-item">
+      <h3>ما هي بطاقات التحدي؟</h3>
+      <div class="faq-answer">بطاقات تحتوي على مهام ملهمة تساعدك على تطوير نفسك وتنمية وعيك.</div>
+    </div>
+    <div class="faq-item">
+      <h3>كيف أستخدم بطاقة التحدي؟</h3>
+      <div class="faq-answer">اختر بطاقة، نفذ التحدي، ثم دوّن تجربتك في المساحة المخصصة لها داخل التطبيق أو الموقع.
+      </div>
+    </div>
+
+    <!-- أسئلة عن بطاقة فن العيش الواعي -->
+    <div class="faq-item">
+      <h3>ما هي بطاقة فن العيش الواعي؟</h3>
+      <div class="faq-answer">بطاقة تركز على تحسين جودة حياتك اليومية من خلال وعيك بأنماطك وسلوكك.</div>
+    </div>
+    <div class="faq-item">
+      <h3>هل بطاقة فن العيش مناسبة للجميع؟</h3>
+      <div class="faq-answer">نعم، صممت لتناسب مختلف الفئات العمرية وتساعدهم على الاستقرار الذهني والنفسي.</div>
+    </div>
+
+    <!-- أسئلة عن "صحوة" -->
+    <div class="faq-item">
+      <h3>ما هو برنامج صحوة؟</h3>
+      <div class="faq-answer">هو برنامج إرشادي يعينك على العودة لنفسك الحقيقية عبر مراحل متدرجة من الفهم والوعي.</div>
+    </div>
+    <div class="faq-item">
+      <h3>هل يجب إنهاء برنامج صحوة خلال مدة محددة؟</h3>
+      <div class="faq-answer">يفضل الالتزام بالجدول المقترح، ولكن يمكنك التقدم حسب وتيرتك الخاصة.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>نموذج التواصل</h2>
+    <form action="#" method="post">
+      <label for="name">اسمك:</label>
+      <input type="text" id="name" name="name">
+
+      <label for="email">البريد الإلكتروني:</label>
+      <input type="email" id="email" name="email">
+
+      <label for="message">وصف المشكلة:</label>
+      <textarea id="message" name="message" rows="5"></textarea>
+
+      <button type="submit">إرسال</button>
+    </form>
+  </div>
+
+  <div class="section">
+    <h2>خيارات دعم أخرى</h2>
+    <ul>
+      <li>البريد الإلكتروني: saroalshameri@gmail.com</li>
+      <li>الدردشة الحية: (مثل Tawk.to)</li>
+      <li>واتساب: <a href="https://wa.me/777777777">الدردشة على واتساب</a></li>
+    </ul>
+  </div>
+
+  <script>
+    document.querySelectorAll('.faq-item h3').forEach(item => {
+      item.addEventListener('click', () => {
+        const parent = item.parentElement;
+        parent.classList.toggle('active');
+      });
+    });
+    // دالة تبديل الوضع الليلي
+    function toggleNightMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    }
+
+    // تحميل حالة الوضع الليلي عند فتح الصفحة
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+
+</html>

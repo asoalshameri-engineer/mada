@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Login / Signup</title>
+  <link rel="icon" href="img/dd.jpg" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f0f2f5;
+    }
+
+    .container { /*الاطار حول log*/
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      width: 400px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      direction: rtl;
+    }
+
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .tab-buttons button {  /* بالاعلى الزر الى فيه تسجيل الدخول*/
+      border: none;
+      background: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #0c0909;
+      border-bottom: 3px solid transparent; /*الخط اسفل كلمة تسجيل الدخول*/
+    }
+
+    .tab-buttons button.active {
+      color: #020107; /*الزر الى فيه تسجيل الدخول*/
+      border-color: #2d2d34; /*الخط اسفل كلمة تسجيل الدخول*/
+    }
+
+    form {
+      display: none; /*اخفاء النموذج عند الضغط على تسجيل*/
+      flex-direction: column;
+    }
+
+    form.active {/* اظهار النموذج عند الضغط على تسجيل الدخول*/
+      display: flex;
+    }
+
+    .input-box { /* المسافات داخل الفريم*/
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .input-box input,
+    .input-box select { /*redius */
+      width: 100%;
+      padding: 10px 40px 10px 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .input-box i { /*icon*/
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);/*بالمنتصف*/
+      color: #333333;
+    }
+
+    .btn {
+      background: #8e2cb1;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .message {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .forgot-password {
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .forgot-password a {
+      color: #2d2d34;
+      text-decoration: none; /*يزيل الخط السفلي*/
+    }
+
+    .forgot-password a:hover {/*عند تحريك الماوس يظهر*/
+      text-decoration: underline;
+    }
+
+    /* أنماط زر الوضع الليلي */
+    .night-mode-toggle {
+      cursor: pointer;
+      padding: 8px;
+      margin-left: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .night-mode-icon {
+      font-size: 20px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* أنماط الوضع الليلي */
+    body.dark-mode {
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .challenge-card {
+      background-color: #2d2d2d;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+
+   
+  </style>
+</head>
+
+<body>
+  <header>
+    <!-- العناصر الموجودة حاليا -->
+    <div class="night-mode-toggle" onclick="toggleNightMode()">
+
+      <button class="night-mode-icon"
+        style="position: absolute; top: 20px;left:50%;transform:translateX(-50%);z-index: 1000;color: #8e2cb1;border:none ">▶</button>
+
+
+    </div>
+  </header>
+  <div class="container">
+    <div class="tab-buttons">
+      <button class="active" id="login-tab">تسجيل الدخول</button>
+      <button id="signup-tab">إنشاء حساب</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login-form" class="active">
+      <div class="input-box">
+        <input id="login-username" type="text" placeholder="اسم المستخدم" required />
+        <i class='bx bxs-user'></i>
+      </div>
+      <div class="input-box">
+        <input id="login-password" type="password" placeholder="كلمة المرور" required />
+        <i class='bx bxs-lock-alt'></i>
+      </div>
+      <button type="button" class="btn" onclick="handleLogin()">دخول</button>
+      <div class="forgot-password">
+        <a href="resetPassword.html">نسيت كلمة المرور؟</a>
+      </div>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="signup-form">
+      <div id="error" class="message"></div>
+      <div class="input-box">
+        <input type="text" id="signup-name" placeholder="اسم المستخدم" required />
+        <i class='bx bxs-user'></i>
+      </div>
+      <div class="input-box">
+        <input type="email" id="signup-email" placeholder="البريد الإلكتروني" required />
+        <i class='bx bxs-envelope'></i>
+      </div>
+      <div class="input-box">
+        <input type="number" id="signup-age" placeholder="العمر" required />
+        <i class='bx bxs-calendar'></i>
+      </div>
+      <div class="input-box">
+        <select id="signup-gender" required>
+          <option value="">اختر الجنس</option>
+          <option value="ذكر">ذكر</option>
+          <option value="أنثى">أنثى</option>
+        </select>
+        <i class='bx bxs-user-detail'></i>
+      </div>
+      <div class="input-box">
+        <select id="signup-type" required>
+          <option value="">نوع المستخدم</option>
+          <option value="طالب">المبتدى</option>
+          <option value="معلم">الملتزم</option>
+          <option value="زائر">المتحمس</option>
+          <option value="إداري">المحترف</option>
+        </select>
+        <i class='bx bxs-id-card'></i>
+      </div>
+      <div class="input-box">
+        <input type="password" id="signup-password" placeholder="كلمة المرور" required />
+        <i class='bx bxs-lock-alt'></i>
+      </div>
+      <button type="button" class="btn" onclick="handleSignup()">تسجيل</button>
+    </form>
+  </div>
+
+  <script>
+    const loginTab = document.getElementById('login-tab');//تبوبات التنقل
+    const signupTab = document.getElementById('signup-tab');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+
+    loginTab.addEventListener('click', () => {
+      loginTab.classList.add('active');
+      signupTab.classList.remove('active');
+      loginForm.classList.add('active');
+      signupForm.classList.remove('active');
+    });
+
+    signupTab.addEventListener('click', () => {
+      signupTab.classList.add('active');
+      loginTab.classList.remove('active');
+      signupForm.classList.add('active');
+      loginForm.classList.remove('active');
+    });
+
+    function handleSignup() {//التعامل مع عملية التسجيل
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const age = parseInt(document.getElementById('signup-age').value);
+      const gender = document.getElementById('signup-gender').value;
+      const type = document.getElementById('signup-type').value;
+      const password = document.getElementById('signup-password').value;
+      const error = document.getElementById('error');
+
+      if (!name || !email || !age || !gender || !type || !password) {
+        error.textContent = "يرجى تعبئة جميع الحقول.";
+        return;
+      }
+
+      if (age < 15) {
+        error.textContent = "يجب أن يكون العمر 15 سنة أو أكثر.";
+        return;
+      }
+
+      const user = { name, email, age, gender, type, password };
+      localStorage.setItem('userProfile', JSON.stringify(user));
+
+      // الانتقال تلقائيًا إلى تبويب تسجيل الدخول
+      signupTab.classList.remove('active');
+      loginTab.classList.add('active');
+      signupForm.classList.remove('active');
+      loginForm.classList.add('active');
+
+      document.getElementById('login-username').value = name;
+      error.textContent = "";
+    }
+
+    function handleLogin() {//التعامل مع عملية تسجيل الدخول
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+      const user = JSON.parse(localStorage.getItem('userProfile'));
+
+      if (user && username === user.name && password === user.password) {
+        window.location.href = 'interface.html';
+      } else {
+        alert("اسم المستخدم أو كلمة المرور غير صحيحة.");
+      }
+    }
+    // دالة تبديل الوضع الليلي
+    function toggleNightMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    }
+
+    // تحميل حالة الوضع الليلي عند فتح الصفحة
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+    }
+
+  </script>
+</body>
+
+</html>

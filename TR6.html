@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> الحرية الداخلية</title>
+  <link rel="icon" href="img/dd.jpg" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+    }
+
+    .search-container {
+      display: flex;
+      gap: 10px;
+      margin: 20px;
+      align-items: center;
+    }
+
+    #searchInput {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      flex: 1;
+    }
+
+    .clear-btn {
+      padding: 8px 16px;
+      background-color: #8e2cb1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-size: 16px;
+    }
+
+    .clear-btn:hover {
+      background-color: #2b62c0;
+    }
+
+    .challenge-container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 1rem;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .challenge-card {
+      width: calc(30% - 1.5rem);
+      min-width: 250px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+      .challenge-card {
+        width: calc(50% - 1.5rem);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .challenge-card {
+        width: 100%;
+      }
+    }
+
+    .challenge-card:hover {
+      transform: scale(1.01);
+    }
+
+    .detail-view {
+      display: none;
+      padding: 1rem;
+      max-width: 600px;
+      margin: 15px auto;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .active-view {
+      display: block;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+
+    .card-img {
+      width: 100%;
+      height: max-content;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .challenge-frame {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #f9f9f9;
+      border-radius: 6px;
+      border: 1px solid #eee;
+    }
+
+    .challenge-frame h2 {
+      font-size: 1.2rem;
+      margin-top: 0;
+    }
+
+    .challenge-frame p {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    textarea {
+      width: calc(100% - 12px);
+      height: 80px !important;
+      /* تثبيت ارتفاع مساحة الملاحظات بشكل قاطع */
+      margin-top: 0.5rem;
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+      resize: none;
+      /* منع تغيير حجم مربع النص */
+    }
+
+    .buttons {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      flex-grow: 1;
+      padding: 0.7rem;
+      background: #e0e0e0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      background: #d1d1d1;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #eee;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #8e2cb1;
+      width: 0%;
+      transition: width 0.5s;
+      border-radius: 5px;
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      color: #555;
+    }
+
+    .small-square {
+      display: block;
+      width: 90px;
+      height: 35px;
+      background-color: #8e2cb1;
+      color: rgb(245, 240, 240);
+      text-align: center;
+      line-height: 35px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .small-square:hover {
+      background-color: #6293de;
+    }
+
+    .support-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      background-color: #8e2cb1;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 50px;
+      border-radius: 50%;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+
+    .support-button:hover {
+      background-color: #0056b3;
+    }
+
+    /* أنماط زر الوضع الليلي */
+    .night-mode-toggle {
+      cursor: pointer;
+      padding: 8px;
+      margin-left: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .night-mode-icon {
+      font-size: 20px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* أنماط الوضع الليلي */
+    body.dark-mode {
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .challenge-card {
+      background-color: #2d2d2d;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .detail-view,
+    body.dark-mode .challenge-frame {
+      background-color: #2d2d2d;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .btn {
+      background-color: #444;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .btn:hover {
+      background-color: #555;
+    }
+
+    body.dark-mode textarea {
+      background-color: #333;
+      color: #e0e0e0;
+      border-color: #555;
+    }
+
+    body.dark-mode .search-container input {
+      background-color: #333;
+      color: #e0e0e0;
+      border-color: #555;
+    }
+
+    body.dark-mode .clear-btn {
+      background-color: #6a3093;
+    }
+
+    body.dark-mode .clear-btn:hover {
+      background-color: #7d3fb8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <!-- العناصر الموجودة حاليا -->
+    <div class="night-mode-toggle" onclick="toggleNightMode()">
+      <div class="night-mode-icon" style="color: #8e2cb1;">▶</div>
+
+      <a href="support.html" class="support-button">؟</a>
+    </div>
+  </header>
+
+  <div class="search-container" id="searchContainer">
+    <input type="text" placeholder="ابحث..." id="searchInput" oninput="handleSearch()">
+    <button class="clear-btn" onclick="clearSearch()">مسح</button>
+  </div>
+
+  <div class="challenge-container" id="challengeList">
+    <div class="challenge-card" onclick="openChallenge(1)">
+      <div class="card-title">كسر القيد الخفي</div>
+      <img src="img/tt7.png" class="card-img" alt="صورة تحدي الامتنان" />
+      <div class="card-desc">الوعي بالسجون النفسية غير المرئية....</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(2)">
+      <div class="card-title">حرية أن تقول لا</div>
+      <img src="img/tt7.png" class="card-img" alt="" />
+      <div class="card-desc">التحرر من الإرضاء القهري للآخرين....</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(3)">
+      <div class="card-title">التخلص من الحاجة للتقدير الدائم </div>
+      <img src="img/tt7.png" class="card-img" alt="" />
+      <div class="card-desc">التحرر من عبودية الصورة أمام الآخرين....</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(4)">
+      <div class="card-title">حرية الفكر</div>
+      <img src="img/tt7.png" class="card-img" alt="" />
+      <div class="card-desc">امتلاك القدرة على التفكير المستقل....</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(5)">
+      <div class="card-title">أن أختار طريقي</div>
+      <img src="img/tt7.png" class="card-img" alt="" />
+      <div class="card-desc">التحرر من المقارنات والطرق المفروضة...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(6)">
+      <div class="card-title">تحريري من الماضي</div>
+      <img src="img/tt7.png" class="card-img" aalt="" />
+      <div class="card-desc"> عدم السماح للذكريات بتقييد الحاضر. ...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(7)">
+      <div class="card-title">حرية المشاعر</div>
+      <img src="img/tt7.png" class="card-img" alt="" />
+      <div class="card-desc">التعبير عن الذات دون خوف....</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(8)">
+      <div class="card-title">أن أكون على طبيعتي</div>
+      <img src="img/tt7.png" class="card-img" alt="" />
+      <div class="card-desc">التحرر من التجميل والتصنع....</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(9)">
+      <div class="card-title">التحرر من الزمن</div>
+      <img src="img/tt7.png" class="card-img" alt="" />
+      <div class="card-desc">العيش في اللحظة دون تعجل أو ندم....</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(10)">
+      <div class="card-title"> أنا الحاكم على مملكتي </div>
+      <img src="img/tt7.png" class="card-img" alt="" />
+      <div class="card-desc">الشعور بالسيادة على الذات....</div>
+    </div>
+    <a href="supportTR.html" class="support-button">?</a>
+  </div>
+
+  <div class="detail-view" id="challengeDetail">
+    <button class="back-button" onclick="goBackToChallenges()">← العودة</button>
+    <div class="challenge-frame">
+      <h2 id="challengeTitle"></h2>
+      <img id="challengeImage" style="width:100%; height:auto; border-radius:6px; margin-bottom: 0.5rem;"
+        alt="صورة التحدي بالتفصيل" />
+      <p id="challengeDescription"></p>
+    </div>
+    <div>
+      <h3>هدف التحدي:</h3>
+      <p style="font-size: 1rem;">قم بتنفيذ التحدي بكل جدية واستمتع بتجربتك.</p>
+    </div>
+    <div>
+      <h3>ملاحظات:</h3>
+      <textarea style="height: 80px !important; resize: none;" placeholder="اكتب ملاحظاتك هنا..."></textarea>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="buttons">
+      <button class="btn" id="completeButton" onclick="markCompleted()">تم الإنجاز</button>
+
+      <button class="btn" onclick="shareChallenge()">مشاركة</button>
+    </div>
+  </div>
+
+
+
+  <a href="interface.html" class="small-square">رجوع</a>
+
+  <script>
+    const challengeData = {
+      1: {
+        title: "كسر القيد الخفي",
+        img: "img/tt7.png",
+        desc: ": ليست كل القيود حبالًا تُربط بنا من الخارج. أحيانًا، يكون السجن فكرة، أو شعورًا، أو حُكمًا على الذات تكرر حتى صدّقناه. راقب تلك الأصوات التي تُقيدك من الداخل… تلك التي تقول لك إنك لست كافيًا. لا تحاربها، بل أنرها بالوعي، وافهم مصدرها. لأن أول طريق الحرية… أن تراها..."
+      },
+      2: {
+        title: "حرية أن تقول لا",
+        img: "img/tt7.png",
+        desc: "كم مرة قلت نعم بينما قلبك يصرخ  لا؟ ليس كل طلب يُلبى، ولا كل توقّع يُجاب. حريتك تبدأ حين تكف عن تقديم نفسك قرابين لرضى الآخرين. أن تحمي وقتك، طاقتك، وحقك في الاختيار، هذا ليس أنانية… بل شجاعة روح تدافع عن وجودها. ..."
+      },
+      3: {
+        title: "التخلص من الحاجة للتقدير الدائم",
+        img: "img/tt7.png",
+        desc: " لا بأس إن لم يُعجب بك الجميع. ليس هذا معيارك. ركضك خلف الإعجاب يُتعبك، ويُشتتك عن حقيقتك. دع صورتك تُشبهك، لا تُشبه توقعاتهم. فأنت أثمن من أن تُقاس بنظرة عابرة أو تصفيق مؤقت. ..."
+      },
+      4: {
+        title: "حرية الفكر",
+        img: "img/tt7.png",
+        desc: " من منحك عقلًا، أرادك أن تفكّر به، لا أن تُكرر. اسأل، اشك، أعد النظر. لا تقبل شيئًا فقط لأنه متوارث. حرّ عقلك، حرّك وعيك، وسترى كم من الأسوار قد بُنيت بداخلك… وأنت تملك مفتاحها.. .."
+      },
+      5: {
+        title: "أن أختار طريقي",
+        img: "img/tt7.png",
+        desc: "الحياة ليست سباقًا، والطريق لا يُقاس بطوله أو عدد السائرين فيه. اختر الطريق الذي يُشبه قلبك، حتى لو لم يُصفق لك أحد. تذكر: لا مجد في الوصول إلى القمة إذا لم تكن قمتك.. .."
+      },
+      6: {
+        title: " تحريري من الماضي ",
+        img: "img/tt7.png",
+        desc: "لا أحد يخرج من ماضيه سالمًا، لكن يمكن أن يخرج حرًا. تحرّر لا بنسيانه، بل بقبوله كجزء من الحكاية… لا كل الحكاية. كل لحظة تختار فيها عدم العودة إليه، تمنحك جناحًا جديدًا للطيران..."
+      },
+      7: {
+        title: "حرية المشاعر",
+        img: "img/tt7.png",
+        desc: " لا تُخنق دمعة تريد أن تُولد، ولا تكتم غضبًا يتطلب أن يُقال. حرية المشاعر لا تعني أن نغضب بلا وعي، بل أن نُعبر دون تزييف. حين تأذن لمشاعرك بالمرور، تتخفف روحك، وتُزهر داخلك الحرية..."
+      },
+      8: {
+        title: " أن أكون على طبيعتي",
+        img: "img/tt7.png",
+        desc: " لا تبحث عن نسخة محسّنة من نفسك لتعرضها على العالم. العالم بحاجة إلى حقيقتك، لا واجهتك. لا تُجمّل نفسك بالكلمات والتصرفات لتُرضي. كن أنت، وستجد من يراك كما أنت… ويحبك كما أنت..."
+      },
+      9: {
+        title: "التحرر من الزمن ",
+        img: "img/tt7.png",
+        desc: " ما مضى ذهب، وما سيأتي لا تملكه. اللحظة هي كنزك الوحيد. حرّ نفسك من الندم الذي يسرق ماضيك، ومن القلق الذي يسرق مستقبلك. كن هنا… فقط هنا. هذه اللحظة… هي بداية حريتك..."
+      },
+      10: {
+        title: "أنا الحاكم على مملكتي",
+        img: "img/tt7.png",
+        desc: " حياتك ليست منطقة حرة لمن يشاء أن يدخل ويُقرر. لا رأي يعلو فوق صوتك في داخلك. حُكمك على ذاتك أعدل من محكمة العالم. قراراتك… سلطتك. حين تتيقن أنك سيّد نفسك، تصبح الحياة مملكتك الواسعة، لا قيدك الضيق.. .."
+      }
+    };
+
+    function openChallenge(id) {
+      currentChallengeId = id;
+
+      const data = challengeData[id];
+      document.getElementById("challengeList").style.display = "none";
+      document.getElementById("challengeDetail").classList.add("active-view");
+      document.getElementById("challengeTitle").innerText = data.title;
+      document.getElementById("challengeImage").src = data.img;
+      document.getElementById("challengeDescription").innerText = data.desc;
+      document.getElementById("completeButton").style.display = "block";
+      document.querySelector(".search-container").style.visibility = "hidden";
+
+
+    }
+
+    function goBackToChallenges() {
+      document.getElementById("challengeDetail").classList.remove("active-view");
+      document.getElementById("challengeList").style.display = "flex";
+      document.getElementById("completeButton").style.display = "none";
+      document.querySelector(".search-container").style.visibility = "visible";
+
+     
+    }
+
+    function markCompleted() {
+      document.getElementById("progressFill").style.width = "100%";
+    }
+
+    function resetProgress() {
+      document.getElementById("progressFill").style.width = "0%";
+    }
+
+    function shareChallenge() {
+      const currentUrl = window.location.href;
+      navigator.clipboard.writeText(currentUrl).then(() => {
+        alert("تم نسخ رابط التحدي إلى الحافظة!");
+      }).catch(err => {
+        console.error('فشل نسخ الرابط: ', err);
+        alert("فشل نسخ الرابط.");
+      });
+    }
+
+    // --- Search Functions ---
+    function handleSearch() {
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+      const challengeCards = document.querySelectorAll(".challenge-card");
+
+      challengeCards.forEach(card => {
+        const title = card.querySelector(".card-title").innerText.toLowerCase();
+        const description = card.querySelector(".card-desc").innerText.toLowerCase();
+
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+          card.style.display = "block"; // Show the card
+        } else {
+          card.style.display = "none"; // Hide the card
+        }
+      });
+    }
+
+    function clearSearch() {
+      document.getElementById("searchInput").value = ""; // Clear the input field
+      handleSearch(); // Call handleSearch to reset and show all cards
+    }
+    // --- End Search Functions ---
+    // دالة تبديل الوضع الليلي
+    function toggleNightMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    }
+
+    // تحميل حالة الوضع الليلي عند فتح الصفحة
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+
+</html>

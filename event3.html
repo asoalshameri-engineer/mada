@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> انبثاق من الداخل</title>
+  <link rel="icon" href="img/dd.jpg" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+    }
+
+    .search-container {
+      display: flex;
+      gap: 10px;
+      margin: 20px;
+      align-items: center;
+    }
+
+    #searchInput {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      flex: 1;
+    }
+
+    .clear-btn {
+      padding: 8px 16px;
+      background-color: #8e2cb1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-size: 16px;
+    }
+
+    .clear-btn:hover {
+      background-color: #2b62c0;
+    }
+
+    .challenge-container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 1rem;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .challenge-card {
+      width: calc(30% - 1.5rem);
+      min-width: 250px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+      .challenge-card {
+        width: calc(50% - 1.5rem);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .challenge-card {
+        width: 100%;
+      }
+    }
+
+    .challenge-card:hover {
+      transform: scale(1.01);
+    }
+
+    .detail-view {
+      display: none;
+      padding: 1rem;
+      max-width: 600px;
+      margin: 15px auto;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .active-view {
+      display: block;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+
+    .card-img {
+      width: 100%;
+      height: max-content;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .challenge-frame {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #f9f9f9;
+      border-radius: 6px;
+      border: 1px solid #eee;
+    }
+
+    .challenge-frame h2 {
+      font-size: 1.2rem;
+      margin-top: 0;
+    }
+
+    .challenge-frame p {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    textarea {
+      width: calc(100% - 12px);
+      height: 80px !important;
+      /* تثبيت ارتفاع مساحة الملاحظات بشكل قاطع */
+      margin-top: 0.5rem;
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+      resize: none;
+      /* منع تغيير حجم مربع النص */
+    }
+
+    .buttons {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      flex-grow: 1;
+      padding: 0.7rem;
+      background: #e0e0e0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      background: #d1d1d1;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #eee;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #8e2cb1;
+      width: 0%;
+      transition: width 0.5s;
+      border-radius: 5px;
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      color: #555;
+    }
+
+    .small-square {
+      display: block;
+      width: 90px;
+      height: 35px;
+      background-color: #8e2cb1;
+      color: rgb(245, 240, 240);
+      text-align: center;
+      line-height: 35px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .small-square:hover {
+      background-color: #6293de;
+    }
+
+    .support-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      background-color: #8e2cb1;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 50px;
+      border-radius: 50%;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+
+    .support-button:hover {
+      background-color: #0056b3;
+    }
+
+    /* أنماط زر الوضع الليلي */
+    .night-mode-toggle {
+      cursor: pointer;
+      padding: 8px;
+      margin-left: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .night-mode-icon {
+      font-size: 20px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* أنماط الوضع الليلي */
+    body.dark-mode {
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .challenge-card {
+      background-color: #2d2d2d;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .detail-view,
+    body.dark-mode .challenge-frame {
+      background-color: #2d2d2d;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .btn {
+      background-color: #444;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .btn:hover {
+      background-color: #555;
+    }
+
+    body.dark-mode textarea {
+      background-color: #333;
+      color: #e0e0e0;
+      border-color: #555;
+    }
+
+    body.dark-mode .search-container input {
+      background-color: #333;
+      color: #e0e0e0;
+      border-color: #555;
+    }
+
+    body.dark-mode .clear-btn {
+      background-color: #6a3093;
+    }
+
+    body.dark-mode .clear-btn:hover {
+      background-color: #7d3fb8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <!-- العناصر الموجودة حاليا -->
+    <div class="night-mode-toggle" onclick="toggleNightMode()">
+      <div class="night-mode-icon" style="color: #8e2cb1;">▶</div>
+
+      <a href="support.html" class="support-button">؟</a>
+    </div>
+  </header>
+
+  <div class="search-container" id="searchContainer">
+    <input type="text" placeholder="ابحث..." id="searchInput" oninput="handleSearch()">
+    <button class="clear-btn" onclick="clearSearch()">مسح</button>
+  </div>
+
+
+  <div class="challenge-container" id="challengeList">
+    <div class="challenge-card" onclick="openChallenge(1)">
+      <div class="card-title">شعلة الحافز</div>
+      <img src="img/ah.png" class="card-img" alt="" />
+      <div class="card-desc">إشعال رغبتك في التغيير...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(2)">
+      <div class="card-title">همسة الأمل</div>
+      <img src="img/ah.png" class="card-img" alt="" />
+      <div class="card-desc">تغذية التفاؤل...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(3)">
+      <div class="card-title">نور داخلي </div>
+      <img src="img/ah.png" class="card-img" alt="" />
+      <div class="card-desc">إدراك القوة الكامنة داخلك...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(4)">
+      <div class="card-title">قطرة صبر</div>
+      <img src="img/ah.png" class="card-img" alt="" />
+      <div class="card-desc">تعزيز التحمل والانتظار...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(5)">
+      <div class="card-title">نبض الإلهام</div>
+      <img src="img/ah.png" class="card-img" alt="" />
+      <div class="card-desc">تحفيز الإبداع...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(6)">
+      <div class="card-title">دفء المشاعر</div>
+      <img src="img/ah.png" class="card-img" alt="" />
+      <div class="card-desc"> الاتصال العميق بالعواطف...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(7)">
+      <div class="card-title">شعور الامتنان الصادق</div>
+      <img src="img/ah.png" class="card-img" alt="" />
+      <div class="card-desc">تعزيز المشاعر الإيجابية...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(8)">
+      <div class="card-title">لحظة انطلاق</div>
+      <img src="img/ah.png" class="card-img" alt="" />
+      <div class="card-desc">البدء بحماس جديد...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(9)">
+      <div class="card-title">صفحة بيضاء</div>
+      <img src="img/ah.png" class="card-img" alt="" />
+      <div class="card-desc">التحرر من الماضي...</div>
+    </div>
+    <div class="challenge-card" onclick="openChallenge(10)">
+      <div class="card-title"> همسة للنفس </div>
+      <img src="img/ah.png" class="card-img" alt="" />
+      <div class="card-desc">الاعتناء الداخلي...</div>
+    </div>
+    <a href="supportevent.html" class="support-button">?</a>
+  </div>
+
+  <div class="detail-view" id="challengeDetail">
+    <button class="back-button" onclick="goBackToChallenges()">← العودة</button>
+    <div class="challenge-frame">
+      <h2 id="challengeTitle"></h2>
+      <img id="challengeImage" style="width:100%; height:auto; border-radius:6px; margin-bottom: 0.5rem;"
+        alt="صورة التحدي بالتفصيل" />
+      <p id="challengeDescription"></p>
+    </div>
+    <div>
+      <h3>هدف التحدي:</h3>
+      <p style="font-size: 1rem;">قم بتنفيذ التحدي بكل جدية واستمتع بتجربتك.</p>
+    </div>
+    <div>
+      <h3>ملاحظات:</h3>
+      <textarea style="height: 80px !important; resize: none;" placeholder="اكتب ملاحظاتك هنا..."></textarea>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="buttons">
+      <button class="btn" id="completeButton" onclick="markCompleted()">تم الإنجاز</button>
+      <button class="btn" onclick="shareChallenge()">مشاركة</button>
+    </div>
+  </div>
+
+
+
+  <a href="interface.html" class="small-square">رجوع</a>
+
+  <script>
+    const challengeData = {
+      1: {
+        title: "شعلة الحافز",
+        img: "img/ah.png",
+        desc: "استحضر لحظة شعرت فيها بالحماس الحقيقي، تلك الشرارة التي جعلتك تتحرك بلا تردد. احتفظ بهذا الشعور كوقود داخلي يمدك بالطاقة والقوة في أوقات التحدي، وذكر نفسك دائمًا بأن بداخلك شعلة لا تنطفئ مهما تعثرت.."
+      },
+      2: {
+        title: "همسة الأمل",
+        img: "img/ah.png",
+        desc: " همس لنفسك بكلمات أمل وحب، كأنك تخبر قلبك بأن الغد يحمل الأفضل دومًا. دع تلك الكلمات تتغلغل في أعماقك، فتزرع بذور التفاؤل التي تنمو يومًا بعد يوم، لتصبح منارة ترشدك في اللحظات الصعبة.."
+      },
+      3: {
+        title: "نور داخلي",
+        img: "img/ah.png",
+        desc: "خُذ دقيقة واحدة فقط للتأمل في قوتك الداخلية ومواهبك التي قد تكون مخفية أو غير مكتشفة بعد. استشعر هذا النور يضيء طريقك، ويمنحك الثقة للانطلاق نحو أحلامك وأهدافك دون خوف أو تردد .."
+      },
+      4: {
+        title: "قطرة صبر",
+        img: "img/ah.png",
+        desc: " تذكر أن كل شيء عظيم يبدأ بقطرات صغيرة من الصبر، كالمطر الذي ينهمر ببطء ليغذي الأرض ويزرع الحياة. امنح نفسك الوقت، وكن صبورًا مع نفسك في رحلة النمو، فالصبر هو مفتاح النجاح والتحول الحقيقي .."
+      },
+      5: {
+        title: "نبض الإلهام",
+        img: "img/ah.png",
+        desc: " استمع إلى موسيقى تلهمك، أو اقرأ نصًا يثير فيك الأفكار الجديدة. دع هذا النبض ينشط خلايا دماغك وروحك، ويشعل نار الإبداع التي تساعدك على رؤية الفرص من حولك بطريقة مختلفة، فتخلق شيئًا فريدًا ينبع من أعماقك.."
+      },
+      6: {
+        title: "دفء المشاعر ",
+        img: "img/ah.png",
+        desc: "اسمح لنفسك أن تشعر بكل مشاعرك دون قيد أو حكم، كأنك تعانق كل جزء منك بحنان واحتضان. احتضن فرحك، حزنك، خوفك، وأملِك بلطف، فهذا الاتصال العميق يجعل روحك أكثر مرونة وقوة.."
+      },
+      7: {
+        title: "شعور الامتنان الصادق",
+        img: "img/ah.png",
+        desc: "دوّن ثلاثة أشياء تشعر بالامتنان لها اليوم، سواء كانت كبيرة أو صغيرة. استشعر كل واحدة منها في قلبك كأنها زهرة تنمو في حديقة روحك، فشكر الله على النعم يقوي الروح ويفتح أبواب الخير.."
+      },
+      8: {
+        title: "لحظة انطلاق",
+        img: "img/ah.png",
+        desc: "قرر خطوة صغيرة يمكنك اتخاذها فورًا لتحقيق هدفك أو تحسين يومك. استشعر الفرح والحرية التي تأتي مع هذه اللحظة، وكأنك تطلق نفسك من قيود الماضي لتطير نحو المستقبل بحماس متجدد..."
+      },
+      9: {
+        title: "صفحة بيضاء",
+        img: "img/ah.png",
+        desc: "تخيل صفحة بيضاء ناصعة أمامك، تمحو كل الأحزان والأخطاء التي تثقل كاهلك. امنح نفسك الإذن للبدء من جديد، بحرية ونقاء، واعتبر كل يوم فرصة لكتابة قصة جديدة، أكثر جمالًا وأملًا.."
+      },
+      10: {
+        title: "همسة للنفس",
+        img: "img/ah.png",
+        desc: "  تحدث إلى نفسك بلطف ومحبة، كأنك تعانق روحك بكلمات دافئة ومشجعة. قل لنفسك: أنا هنا من أجلك، وأنت تستحق كل الخير والسلام. هذه الهمسة تعزز ثقتك بنفسك، وتغذي قلبك بالحب الداخلي..."
+      }
+    };
+
+
+    function openChallenge(id) {
+      currentChallengeId = id;
+
+      const data = challengeData[id];
+      document.getElementById("challengeList").style.display = "none";
+      document.getElementById("challengeDetail").classList.add("active-view");
+      document.getElementById("challengeTitle").innerText = data.title;
+      document.getElementById("challengeImage").src = data.img;
+      document.getElementById("challengeDescription").innerText = data.desc;
+      document.getElementById("completeButton").style.display = "block";
+      document.querySelector(".search-container").style.visibility = "hidden";
+
+
+    }
+
+    function goBackToChallenges() {
+      document.getElementById("challengeDetail").classList.remove("active-view");
+      document.getElementById("challengeList").style.display = "flex";
+      document.getElementById("completeButton").style.display = "none";
+      document.querySelector(".search-container").style.visibility = "visible"
+      
+    }
+
+    function markCompleted() {
+      document.getElementById("progressFill").style.width = "100%";
+    }
+
+    function resetProgress() {
+      document.getElementById("progressFill").style.width = "0%";
+    }
+
+    function shareChallenge() {
+      const currentUrl = window.location.href;
+      navigator.clipboard.writeText(currentUrl).then(() => {
+        alert("تم نسخ رابط التحدي إلى الحافظة!");
+      }).catch(err => {
+        console.error('فشل نسخ الرابط: ', err);
+        alert("فشل نسخ الرابط.");
+      });
+    }
+
+    // --- Search Functions ---
+    function handleSearch() {
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+      const challengeCards = document.querySelectorAll(".challenge-card");
+
+      challengeCards.forEach(card => {
+        const title = card.querySelector(".card-title").innerText.toLowerCase();
+        const description = card.querySelector(".card-desc").innerText.toLowerCase();
+
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    function clearSearch() {
+      document.getElementById("searchInput").value = "";
+      handleSearch(); // Call handleSearch to show all cards again
+    }
+    // --- End Search Functions ---
+    // دالة تبديل الوضع الليلي
+    function toggleNightMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    }
+
+    // تحميل حالة الوضع الليلي عند فتح الصفحة
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+
+</html>

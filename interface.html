@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مـدى </title>
+    <link rel="icon" href="img/dd.jpg" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            /* ازالة الهوامش الخارجية*/
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            /* تترتب من الاعلى الى الاسفل*/
+            min-height: 100vh;
+            /* الارتفاع لا يمكن ان يكون اقل من 100 وممكن ان يزيد*/
+        }
+
+        /* الوضع الليلي*/
+        body.dark-mode {
+            background-color: #222;
+            color: #eee;
+        }
+
+        /*الجزء العلوي من صفحة الويب */
+        header {
+            display: flex;
+            justify-content: space-between;
+            /* اول عنصر للطرف واخر عنصر للطرف الاخر*/
+            align-items: center;
+            /*فوق وتحت */
+            background-color: #8e2cb1;
+            color: white;
+            padding: 10px 20px;
+            position: relative;
+            /*ضروري من اجل z-index */
+            z-index: 10;
+        }
+
+        header.dark-mode {
+            background-color: #444;
+            color: #fff;
+        }
+
+        header h1 { /*margin الخارجي */
+            margin: 0;
+        }
+
+        .search-container {
+            flex-grow: 1;
+            /* ينمو لياخذ المساحة الفارغة*/
+            margin: 0 20px;
+            /* المساحة حول شريط البحث*/
+            display: flex;
+        }
+
+        .search-container input {
+            /*  المساحة داخل شريط البحث*/
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            /*حواف دائرية */
+            box-sizing: border-box;
+            color: #333;
+            background-color: white;
+        }
+
+        .search-container input.dark-mode {
+            color: #eee;
+            background-color: #555;
+            border-color: #666;
+        }
+
+        .menu-btn {
+            /* الزر الهامبرغر*/
+            font-size: 24px;
+            cursor: pointer;
+            /*يحول الزر الى pointer */
+            color: white;
+        }
+
+        header.dark-mode .menu-btn {
+            color: #eee;
+        }
+
+        .sidebar {
+            /*القائمة المنسدلة */
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s;
+            /* الانزلاق السلس للقائمة*/
+            padding: 20px;
+            overflow-y: auto;
+            /* اذا زاد المحتوى يساوي scoll*/
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            /*المحاذاة للعناصر من اعلى الى اسفل */
+            z-index: 20;
+            box-sizing: border-box;
+        }
+
+
+
+        .sidebar.dark-mode {
+            background-color: #333;
+            color: #eee;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar h2 {
+            /* h2 القائمة*/
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .sidebar section {
+            /*  خارج الاقسام */
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            width: 100%;
+            text-align: right;
+        }
+
+        .sidebar.dark-mode section {
+            border-bottom-color: #555;
+        }
+
+        .sidebar section:last-child {
+            border-bottom: none; /*ازالة الخط من اخر عنصر ويكون ظاهر شكليا*/
+        }
+
+        .sidebar section h3 {
+            /*ككل الاقسام*/
+            margin-top: 0;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .sidebar section .content {
+            /* الداخلية الاعدادات الملف الشخصي*/
+            display: none;
+            padding-right: 10px;
+        }
+
+        .sidebar section input[type="text"],
+        .sidebar section input[type="email"],
+        .sidebar section input[type="number"],
+        .sidebar section input[type="password"] {
+            width: calc(100% - 20px);
+            /* لتجنب التداخل*/
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            direction: rtl;
+            text-align: right;
+            background-color: white;
+            color: #333;
+        }
+
+        .sidebar.dark-mode section input {
+            background-color: #444;
+            color: #eee;
+            border-color: #666;
+        }
+
+        .sidebar section button {
+            padding: 8px 15px;
+            background-color: #8e2cb1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .sidebar section button:hover {
+            background-color: #0056b3;
+        }
+
+        .sidebar .night-mode {
+            /*الوضع الليلي*/
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar.dark-mode .night-mode {
+            border-bottom-color: #555;
+        }
+
+        .sidebar .night-mode button {
+            /*الزر الوضع الليلي*/
+            padding: 5px 10px;
+            font-size: 0.9em;
+            border-radius: 5px;
+            background-color: #6c757d;
+        }
+
+        .sidebar .night-mode button:hover {
+            background-color: #5a6268;
+        }
+
+        .sidebar .faq-item {
+            /*الاسئلة الشائعة*/
+            margin-bottom: 10px;
+        }
+
+        .sidebar .faq-item h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .sidebar .faq-item .answer {
+            display: flex;
+            padding-right: 10px; 
+            line-height: 1.5; /*ارتفاع السطر نفسه*/
+            color: #555;
+        }
+
+        .sidebar.dark-mode .faq-item .answer {
+            color: #ccc;
+        }
+
+        .user-footer {
+            /*الخط المستخدم*/
+            margin-top: auto;
+            padding-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            /*مسافة بين العناصر*/
+            border-top: 1px solid #eee;
+            width: 100%;
+        }
+
+        .sidebar.dark-mode .user-footer {
+            border-top-color: #555;
+        }
+
+        .user-footer img {
+            /*user*/
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            /*كبر الصورة بحيث تغطي كل الاطار*/
+        }
+
+        .upload-btn {
+            /*زر التحميل*/
+            display: inline-block;
+            /*العنصر يظهر مع عناصر ثانية بنفس السطر*/
+            padding: 5px 10px;
+            background-color: #8e2cb1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .upload-btn input[type="file"] {
+            /*تحميل الملف*/
+            display: none;
+        }
+
+        .cards-container {
+            /*البطاقات ككل*/
+            margin: 20px;
+            margin-top: auto;
+        }
+
+        .section {
+            /*الاطار بكل بطاقة*/
+            margin-bottom: 40px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+            /* عشان نقدر نستخدم absolute للأزرار داخلها */
+        }
+
+        .section.dark-mode {
+            border-color: #666;
+        }
+
+        .section h2 {
+            /*card 1*/
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .card-row-container {
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            /*اخفي المحتوى الزائد*/
+        }
+
+        .card-row {
+            /*ككل*/
+            display: flex;
+            overflow-x: auto;
+            /*التمرير الافقي*/
+            gap: 10px;
+            scroll-behavior: smooth;
+            /*تخلي التمرير بسلاسة*/
+            padding: 10px 0;
+        }
+
+        .card-row::-webkit-scrollbar {
+            /*التمرير خلال اللمس*/
+            display: none;
+        }
+
+        .card {
+            min-width: 200px;
+            height: 200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            /*تترتب بشكل مرن وجانبي*/
+            align-items: center;
+            /*بشكل راسي*/
+            justify-content: center;
+            font-weight: bold;
+            transition: transform 0.3s;
+            /*التحريك بشكل سلس*/
+            flex-shrink: 0;
+            /*ما يسمح بالتقليص ابدا*/
+            text-align: center;
+            white-space: nowrap;
+            /*يبقى العنصر في نفس السطر مهما كان طوله*/
+            padding: 0 10px;
+        }
+
+        .card.dark-mode {
+            background-color: #444;
+            color: #eee;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover {
+            /*عند تحريك الموشر يكبر حجمة بنسبة */
+            transform: scale(1.05);
+        }
+
+
+
+        .section-title-container {
+            /*عناوين البطاقات*/
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .night-mode-toggle-container {
+            /* زر الوضع الليلي*/
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .night-mode-toggle-button {
+            /*الزر نفسه*/
+            width: 30px;
+            height: 15px;
+            background-color: #ccc;
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        .night-mode-toggle-button.dark-mode {
+            background-color: #444;
+        }
+
+        .night-mode-toggle-circle {
+            /*الدائرة الى داخل الزر*/
+            width: 13px;
+            height: 13px;
+            background-color: #8e2cb1;
+            border-radius: 50%;
+            position: absolute;
+            /*يجعلها نسبي بالنسبة للاب*/
+            top: 1px;
+            right: 1px;
+            transition: transform 0.3s ease;
+            /*التحريك يكون سلس*/
+            transform: translateX(0);
+            /*تبدا الدائرة من الموقع الافتراضي اليمين*/
+        }
+
+        .night-mode-toggle-button.dark-mode .night-mode-toggle-circle {
+            /*عندما تتحرك الدائرة بالوضع الليلي الى اليسار*/
+            transform: translateX(-15px);
+        }
+
+        .scroll-button {
+            /*اسهم التمرير*/
+            position: absolute;
+            /*استخدمت المطلق من اجل تثبيت مكان الزر داخل الحاوية الازرار تكون فوق الحاوية*/
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 10;
+            color: #8e2cb1;
+        }
+
+        .scroll-button.dark-mode {
+            color: #eee;
+        }
+
+        .scroll-button.left {
+            /*الموضع*/
+            left: 10px;
+        }
+
+        .scroll-button.right {
+            right: 10px;
+        }
+
+        .card {
+            position: relative;
+            /*مرجع للبطاقات نفسها*/
+            /* إضافة هذه الخاصية */
+            padding-bottom: 4px;
+            /*الاسفل بالنسبة لكل البطاقات*/
+
+        }
+
+        .small-square {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            /*تثبت العنصر بالوسط*/
+            width: 80px;
+            height: 30px;
+            background-color: #8e2cb1;
+            color: #f5f0f0;
+            text-align: center;
+            line-height: 30px;
+            /*ارتفاع السطر */
+            text-decoration: none;
+            /*يظهر النص بدون زخرفة*/
+            font-size: 0.8rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+            /*تغيير لون الخلفية */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .small-square:hover {
+            background-color: #6293de;
+            transform: translateX(-50%) scale(1.05);
+            /*بشكل مركزي*/
+        }
+
+        /* للتكيف مع الوضع الليلي */
+        body.dark-mode .small-square {
+            background-color: #444;
+            color: #eee;
+        }
+
+        body.dark-mode .small-square:hover {
+            background-color: #007bff;
+        }
+
+        .support-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #8e2cb1;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 50px;
+            border-radius: 50%;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        .support-button:hover {
+            background-color: #0056b3;
+        }
+
+        .support-button.dark-mode.night-mode {
+            border-bottom-color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .challenge-card {
+                width: calc(50% - 1.5rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .challenge-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>مـدى </h1>
+        <div class="search-container">
+            <input type="text" placeholder="ابحث..." id="searchInput" oninput="handleSearch()">
+        </div>
+        <div class="menu-btn" onclick="toggleMenu()">&#9776;</div>
+    </header>
+    <div class="sidebar" id="sidebar">
+        <h2>القائمة</h2>
+        <section>
+            <h3 onclick="toggleContent('profile-content')">الملف الشخصي</h3>
+            <div class="content" id="profile-content">
+                <label for="full-name">الاسم الكامل:</label>
+                <input type="text" id="full-name" value="اسم المستخدم" disabled />
+                <label for="username">اسم المستخدم:</label>
+                <input type="text" id="username" value="user123" disabled />
+                <label for="age">العمر:</label>
+                <input type="number" id="age" value="30" disabled />
+                <label for="gender">الجنس:</label>
+                <input type="text" id="gender" value="ذكر" disabled />
+                <label for="user-type">نوع المستخدم:</label>
+                <input type="text" id="user-type" value="عضو" disabled />
+                <label for="email">البريد الالكتروني:</label>
+                <input type="email" id="email" value="user@example.com" disabled />
+                <label for="id">ID:</label>
+                <input type="text" id="id" value="ID12345" disabled />
+                <button onclick="enableProfileEdit()">تعديل</button>
+                <button onclick="saveProfileEdit()" style="display: none;">حفظ</button>
+            </div>
+        </section>
+        <section>
+            <h3 onclick="toggleContent('settings-content')">الإعدادات الشخصية</h3>
+            <div class="content" id="settings-content">
+                <label for="change-name">تغيير الاسم:</label>
+                <input type="text" id="change-name" />
+                <label for="change-username">تغيير اليوزر نيم:</label>
+                <input type="text" id="change-username" />
+                <label for="change-email">تغيير البريد:</label>
+                <input type="email" id="change-email" />
+                <label for="change-password">تغيير كلمة المرور:</label>
+                <input type="password" id="change-password" />
+                <button onclick="saveSettings()">حفظ الإعدادات</button>
+                <p style="font-size: 0.8em; color: #777;">(3 مرات بالشهر فقط)</p>
+            </div>
+        </section>
+        <section onclick="toggleContent('app-info-content')">
+            <h3>معلومات التطبيق</h3>
+            <div class="content" id="app-info-content">
+                <p>إصدار التطبيق: 1.0</p>
+                <p>تاريخ الإصدار: 2025-01-01</p>
+            </div>
+        </section>
+        <section class="night-mode">
+            <h3>الوضع الليلي</h3>
+            <div class="night-mode-toggle-container">
+                <div id="nightModeToggle" class="night-mode-toggle-button" onclick="toggleNightMode()">
+                    <span class="night-mode-toggle-circle"></span>
+                </div>
+            </div>
+        </section>
+        <section onclick="toggleContent('faq-content')">
+            <h3>الأسئلة الشائعة</h3>
+            <div class="content" id="faq-content">
+                <div class="faq-item">
+                    <h4 onclick="toggleAnswer('faq1')">س: كيف يمكنني تغيير صورتي الشخصية؟</h4>
+                    <p class="answer" id="faq1">ج: يمكنك تغيير صورتك الشخصية من خلال قسم الملف الشخصي.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 onclick="toggleAnswer('faq2')">س: كم مرة يمكنني تعديل بياناتي؟</h4>
+                    <p class="answer" id="faq2">ج: يمكنك تعديل بياناتك ثلاث مرات في الشهر من الإعدادات الشخصية.</p>
+                </div>
+            </div>
+        </section>
+        <section onclick="logout()">
+            <h3>تسجيل الخروج</h3>
+        </section>
+        <div class="user-footer">
+            <img id="user-avatar" src=" " alt="User" />
+            <div style="flex-grow: 1;">
+                <span id="username-footer">اسم المستخدم</span>
+                <label class="upload-btn">
+                    تغيير الصورة
+                    <input type="file" accept="image/*" onchange="uploadAvatar(this)" />
+                </label>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div class="cards-container">
+        <div class="section">
+            <div class="section-title-container">
+                <h2>
+                    اختَر وانطلق
+
+                </h2>
+            </div>
+            <div class="card-row-container">
+                <button class="scroll-button left challenges-left">&larr;</button>
+                <div class="card-row challenges-row">
+                    <div class="card">التحدي اليومي <a href="challenge.html" class="small-square">move on</a>
+                    </div>
+
+                    <div class="card">تحدي المهارات <a href="challenge1.html" class="small-square">move on</a></div>
+                    <div class="card">تحديات متسلسلة <a href="challenge2.html" class="small-square">move on</a></div>
+                    <div class="card">تحدي حسب المجال <a href="challenge3.html" class="small-square">move on</a></div>
+                    <div class="card">تحدي سريع <a href="challenge4.html" class="small-square">move on</a></div>
+                    <div class="card">تحدي عشوائي <a href="challenge5.html" class="small-square">move on</a></div>
+                    <div class="card"> تحدي اختياري <a href="challenge6.html" class="small-square">move on</a></div>
+                </div>
+                <button class="scroll-button right challenges-right">&rarr;</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title-container">
+                <h2> صحوة: عندما تفتح الحياة أبوابها من جديد </h2>
+            </div>
+            <div class="card-row-container">
+                <button class="scroll-button left events-left">&larr;</button>
+                <div class="card-row events-row">
+                    <div class="card">خطوة تفتح الطريق <a href="event.html" class="small-square">move on</a></div>
+                    <div class="card">عيش اللحظة <a href="event1.html" class="small-square">move on</a></div>
+                    <div class="card">طاقة التجدد<a href="event2.html" class="small-square">move on</a></div>
+                    <div class="card">انبثاق من الداخل<a href="event3.html" class="small-square">move on</a></div>
+                    <div class="card">إشراقة يوم جديد <a href="event4.html" class="small-square">move on</a></div>
+                    <div class="card">قوة العادات <a href="event5.html" class="small-square">move on</a></div>
+                    <div class="card">بوابة الإلهام <a href="event6.html" class="small-square">move on</a></div>
+                </div>
+                <button class="scroll-button right events-right">&rarr;</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title-container">
+                <h2>فن العيش الواعي: من التأمل إلى الحرية</h2>
+            </div>
+            <div class="card-row-container">
+                <button class="scroll-button left spiritual-left">&larr;</button>
+                <div class="card-row spiritual-row">
+                    <div class="card">التأمل الذهني<a href="TR.html" class="small-square">move on</a></div>
+                    <div class="card">النمو الشخصي<a href="TR1.html" class="small-square">move on</a></div>
+                    <div class="card">العلاقات الانسانية<a href="TR2.html" class="small-square">move on</a></div>
+                    <div class="card">القرار والاختيار<a href="TR3.html" class="small-square">move on</a></div>
+                    <div class="card"> الهوية الذاتية<a href="TR4.html" class="small-square">move on</a></div>
+                    <div class="card"> السلام الداخلي<a href="TR5.html" class="small-square">move on</a></div>
+                    <div class="card"> الحرية الداخلية<a href="TR6.html" class="small-square">move on</a></div>
+                </div>
+                <button class="scroll-button right spiritual-right">&rarr;</button>
+            </div>
+        </div>
+    </div>
+    <!-- زر الدعم الفني -->
+    <a href="support.html" class="support-button">?</a>
+
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const nightModeToggle = document.getElementById('nightModeToggle');
+        const body = document.body; // الصفحة الكاملة
+        const searchInput = document.getElementById('searchInput');
+        const challengesRow = document.querySelector('.challenges-row');
+        const eventsRow = document.querySelector('.events-row');
+        const spiritualRow = document.querySelector('.spiritual-row');
+        let openContentId = null;
+        let darkModeEnabled = localStorage.getItem('darkMode') === 'enabled'; //اذا ضغطت على الزر يتم تفعيل الوضع الليلي
+        const cards = document.querySelectorAll('.card');//احدد البطاقات دفعة واحدة الوضع الليلي
+
+        const challengesLeftButton = document.querySelector('.challenges-left'); //ازرار التمريرالجانبية
+        const challengesRightButton = document.querySelector('.challenges-right');
+        const eventsLeftButton = document.querySelector('.events-left');
+        const eventsRightButton = document.querySelector('.events-right');
+        const spiritualLeftButton = document.querySelector('.spiritual-left');
+        const spiritualRightButton = document.querySelector('.spiritual-right');
+
+        // تطبيق الوضع الليلي عند التحميل إذا كان مفعلًا
+        if (darkModeEnabled) {// اذا كانت true يتم تشغيل الدالة
+            enableDarkMode();
+        }
+
+        function toggleMenu() {
+            sidebar.classList.toggle('open');// يفتح ويغلق القائمة
+            if (openContentId) {
+                document.getElementById(openContentId).style.display = 'none';//يغلق المحتوى الذي تم فتحة سابقا
+                openContentId = null;
+            }
+        }
+
+        function toggleContent(id) {
+            const content = document.getElementById(id);//ياخذ العنصر الذي نريد اخفاءه
+            if (openContentId && openContentId !== id) {
+                document.getElementById(openContentId).style.display = 'none';
+            }//لو كان هناك محتوى مفتوح غير العنصر الذي ضغطنا عليه يتم اخفاوه
+            content.style.display = content.style.display === 'block' ? 'none' : 'block'; // يبدل العرض لوكان ظاهر اخفي لو مخفي اظهر
+            openContentId = content.style.display === 'block' ? id : null;//اذا تم عرض العنصر يتم حفظ الايدي واذا تم اخفاوه يرجع نال
+            if (!sidebar.classList.contains('open')) {// عند الضغط على القائمة الجانبية يتم فتحها
+                sidebar.classList.add('open');
+            }
+        }
+
+        function toggleAnswer(id) {//اخفاء واظهار الاسئلة الشائعة
+            const answer = document.getElementById(id);
+            answer.style.display = answer.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleNightMode() {//التبديل بين الوضع الليلي
+            darkModeEnabled = !darkModeEnabled;
+            if (darkModeEnabled) {
+                enableDarkMode();
+                nightModeToggle.classList.add('dark-mode');
+            } else {
+                disableDarkMode();
+                nightModeToggle.classList.remove('dark-mode');
+            }
+            localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
+            updateScrollButtonStyles();//يخزن حالة الوضع الليلي
+        }
+
+        function enableDarkMode() { //اضافة الوضع الليلي
+            body.classList.add('dark-mode');
+            const header = document.querySelector('header');
+            header.classList.add('dark-mode');
+            const searchInputElem = document.querySelector('.search-container input');
+            searchInputElem.classList.add('dark-mode');
+            cards.forEach(card => card.classList.add('dark-mode'));
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.add('dark-mode'));
+            const sidebarElem = document.querySelector('.sidebar');
+            sidebarElem.classList.add('dark-mode');
+            const scrollButtons = document.querySelectorAll('.scroll-button');
+            scrollButtons.forEach(button => button.classList.add('dark-mode'));
+        }
+
+        function disableDarkMode() {// حذف الوضع الليلي
+            body.classList.remove('dark-mode');
+            const header = document.querySelector('header');
+            header.classList.remove('dark-mode');
+            const searchInputElem = document.querySelector('.search-container input');
+            searchInputElem.classList.remove('dark-mode');
+            cards.forEach(card => card.classList.remove('dark-mode'));
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('dark-mode'));
+            const sidebarElem = document.querySelector('.sidebar');
+            sidebarElem.classList.remove('dark-mode');
+            const scrollButtons = document.querySelectorAll('.scroll-button');
+            scrollButtons.forEach(button => button.classList.remove('dark-mode'));
+        }
+
+        function logout() {
+            alert('تم تسجيل الخروج');
+            sidebar.classList.remove('open');
+            if (openContentId) {
+                document.getElementById(openContentId).style.display = 'none';// لوكان هناك محتوى مفتوح تغلقه وترجع نال
+                openContentId = null;
+            }
+        }
+
+        function enableProfileEdit() {// تعديل بيانات الملف الشخصي
+            const inputs = sidebar.querySelectorAll('#profile-content input');
+            inputs.forEach(input => input.disabled = false);
+            sidebar.querySelector('#profile-content button:first-of-type').style.display = 'none';
+            sidebar.querySelector('#profile-content button:last-of-type').style.display = 'inline-block';
+        }
+
+        function saveProfileEdit() {//الحفظ في حالة التغيير
+            const inputs = sidebar.querySelectorAll('#profile-content input');
+            inputs.forEach(input => input.disabled = true);
+            sidebar.querySelector('#profile-content button:first-of-type').style.display = 'inline-block';
+            sidebar.querySelector('#profile-content button:last-of-type').style.display = 'none';
+            alert('تم حفظ تعديلات الملف الشخصي (سيتم تطبيق القيود في التنفيذ الفعلي)');
+        }
+
+        function saveSettings() {
+            alert('تم حفظ الإعدادات (سيتم تطبيق قيود التعديل في التنفيذ الفعلي)');
+        }
+
+        function uploadAvatar(input) {//رفع الصورة
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('user-avatar').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function handleSearch() {//البحث داخل البطاقات
+            const searchTerm = searchInput.value.toLowerCase();
+            cards.forEach(card => {
+                const cardText = card.textContent.toLowerCase();
+                if (cardText.includes(searchTerm)) {
+                    card.style.border = '2px solid green';
+                } else {
+                    card.style.border = '';
+                }
+            });
+        }
+
+        challengesLeftButton.addEventListener('click', () => {
+            challengesRow.scrollLeft -= 150; // يمكنك تعديل قيمة السكرول حسب الحاجة
+        });
+
+        challengesRightButton.addEventListener('click', () => {
+            challengesRow.scrollLeft += 150; // يمكنك تعديل قيمة السكرول حسب الحاجة
+        });
+
+        eventsLeftButton.addEventListener('click', () => {
+            eventsRow.scrollLeft -= 150; // يمكنك تعديل قيمة السكرول حسب الحاجة
+        });
+
+        eventsRightButton.addEventListener('click', () => {
+            eventsRow.scrollLeft += 150; // يمكنك تعديل قيمة السكرول حسب الحاجة
+        });
+
+        spiritualLeftButton.addEventListener('click', () => {
+            spiritualRow.scrollLeft -= 150; // يمكنك تعديل قيمة السكرول حسب الحاجة
+        });
+
+        spiritualRightButton.addEventListener('click', () => {
+            spiritualRow.scrollLeft += 150; // يمكنك تعديل قيمة السكرول حسب الحاجة
+        });
+
+        // دالة لتحديث ستايلات أزرار السكرول عند تغيير الوضع الليلي
+        function updateScrollButtonStyles() {
+            const scrollButtons = document.querySelectorAll('.scroll-button');
+            scrollButtons.forEach(button => {
+                if (darkModeEnabled) {
+                    button.classList.add('dark-mode');
+                } else {
+                    button.classList.remove('dark-mode');
+                }
+            });
+        }
+        const user = JSON.parse(localStorage.getItem('userProfile'));
+
+        if (user) {
+            //document.getElementById('name').textContent = user.name;
+            document.getElementById('email').textContent = user.email;
+            document.getElementById('age').textContent = user.age;
+            document.getElementById('gender').textContent = user.gender;
+            //document.getElementById('type').textContent = user.type;
+            //document.getElementById('password').textContent = user.password;
+        }
+
+        function goBack() {
+            window.location.href = "log.html"; 
+        }
+
+        function logout() {
+            localStorage.removeItem('userProfile'); // إزالة بيانات المستخدم
+            window.location.href = 'log.html'; // الرجوع لصفحة login/signup
+        }
+    </script>
+
+
+</body>
+
+</html>

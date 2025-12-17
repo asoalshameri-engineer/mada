@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>بطاقة صحوة - فن العيش الواعي</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+
+    h1,
+    h2 {
+      color: #333;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid #292826;
+      padding: 10px 0;
+      cursor: pointer;
+    }
+
+    .faq-item h3 {
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-answer {
+      display: none;
+      padding-top: 10px;
+      color: #555;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-item h3::after {
+      content: '▶';
+      font-size: 14px;
+      transition: transform 0.3s;
+    }
+
+    .faq-item.active h3::after {
+      transform: rotate(90deg);
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #8e2cb1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #c0b11f;
+    }
+
+    /* أنماط زر الوضع الليلي */
+    .night-mode-toggle {
+      cursor: pointer;
+      padding: 8px;
+      margin-left: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .night-mode-icon {
+      font-size: 20px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* أنماط الوضع الليلي */
+    body.dark-mode {
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+    }
+
+   
+  </style>
+</head>
+
+<body>
+
+
+  <header>
+    <!-- العناصر الموجودة حاليا -->
+    <div class="night-mode-toggle" onclick="toggleNightMode()">
+      <div class="night-mode-icon" style="color: #8e2cb1;">▶</div>
+
+
+    </div>
+  </header>
+  <section class="section">
+    <h2 class="section-title">بطاقة صحوة - الأسئلة الشائعة</h2>
+
+    <!-- التأمل الذهني -->
+    <div class="faq-item">
+      <h3 class="faq-question">ما هو التأمل الذهني وكيف يساعد في فن العيش الواعي؟</h3>
+      <div class="faq-answer">
+        التأمل الذهني هو ممارسة توجيه الانتباه للحظة الحالية بدون حكم، مما يساعد على تهدئة العقل وتقليل التوتر، وزيادة
+        الوعي الذاتي لتحسين جودة الحياة.
+      </div>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">كم من الوقت ينبغي تخصيصه يوميًا للتأمل الذهني؟</h3>
+      <div class="faq-answer">
+        يُفضل البدء بخمس إلى عشر دقائق يوميًا، ثم زيادة الوقت تدريجيًا حسب القدرة والرغبة، فالثبات أهم من المدة.
+      </div>
+    </div>
+
+    <!-- العلاقات الإنسانية -->
+    <div class="faq-item">
+      <h3 class="faq-question">كيف يمكن لصحوة الوعي أن تؤثر على العلاقات الإنسانية؟</h3>
+      <div class="faq-answer">
+        توسيع الوعي يساعد على فهم الذات والآخرين بعمق، مما يعزز التعاطف والتواصل الحقيقي ويقلل من النزاعات وسوء الفهم.
+      </div>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">ما أفضل طريقة لتطبيق صحوة الوعي في التعامل مع الآخرين؟</h3>
+      <div class="faq-answer">
+        الاستماع بتمعن، وعدم الحكم السريع، والتواصل بصدق، مع منح نفسك والآخرين مساحة للنمو والتغيير.
+      </div>
+    </div>
+
+    <!-- القرار والاختيار -->
+    <div class="faq-item">
+      <h3 class="faq-question">كيف تساعد بطاقة صحوة في تحسين اتخاذ القرار؟</h3>
+      <div class="faq-answer">
+        من خلال زيادة الوعي بالخيارات الحقيقية والنتائج المحتملة، وتعلم الثقة بالحدس الداخلي والتوازن بين العقل
+        والعاطفة.
+      </div>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">هل يمكن التغلب على التردد باستخدام هذه البطاقات؟</h3>
+      <div class="faq-answer">
+        نعم، تساعد على توضيح الأولويات والقيم الشخصية، مما يخفف من التردد ويزيد من وضوح الرؤية عند اتخاذ القرارات.
+      </div>
+    </div>
+
+    <!-- السلام الداخلي -->
+    <div class="faq-item">
+      <h3 class="faq-question">ما هو السلام الداخلي وكيف يمكن تحقيقه عبر بطاقة صحوة؟</h3>
+      <div class="faq-answer">
+        السلام الداخلي هو حالة من الهدوء والرضا الداخلي، يمكن الوصول إليها من خلال ممارسات التأمل، قبول الذات، والتصالح
+        مع المواقف الخارجية والداخلية.
+      </div>
+    </div>
+    <div class="faq-item">
+      <h3 class="faq-question">كيف أستطيع الحفاظ على السلام الداخلي في أوقات التحديات؟</h3>
+      <div class="faq-answer">
+        بالتركيز على التنفس العميق، وممارسة الامتنان، وعدم مقاومة ما لا يمكن تغييره، والتذكير بأن اللحظة الراهنة هي ما
+        نمتلكه فقط.
+      </div>
+    </div>
+
+  </section>
+
+  <div class="section">
+    <h2>نموذج التواصل</h2>
+    <form action="#" method="post">
+      <label for="name">اسمك:</label>
+      <input type="text" id="name" name="name">
+      <label for="email">البريد الإلكتروني:</label>
+      <input type="email" id="email" name="email">
+      <label for="message">وصف المشكلة:</label>
+      <textarea id="message" name="message" rows="5"></textarea>
+      <button type="submit">إرسال</button>
+    </form>
+  </div>
+
+  <div class="section">
+    <h2>خيارات دعم أخرى</h2>
+    <ul>
+      <li>البريد الإلكتروني: saroalshameri@gmail.com</li>
+      <li>الدردشة الحية: (مثل Tawk.to)</li>
+      <li>واتساب: <a href="https://wa.me/777777777">الدردشة على واتساب</a></li>
+    </ul>
+  </div>
+
+  <script>
+    document.querySelectorAll('.faq-item h3').forEach(item => {
+      item.addEventListener('click', () => {
+        const parent = item.parentElement;
+        parent.classList.toggle('active');
+      });
+    });
+    // دالة تبديل الوضع الليلي
+    function toggleNightMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    }
+
+    // تحميل حالة الوضع الليلي عند فتح الصفحة
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+
+</html>
